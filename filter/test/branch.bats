@@ -46,3 +46,25 @@ PATH="$PATH:$BATS_TEST_DIRNAME/../bin"
   [ "$status" -eq 0 ]
   [ "$output" = "refs/heads/the-masters-tournament matches refs/heads/*master*" ]
 }
+
+@test "branch: matches a or b" {
+  export GITHUB_REF=refs/heads/feature-branch-description
+  run branch "dev|feature-*"
+  [ "$status" -eq 0 ]
+  echo $output
+  [ "$output" = "refs/heads/feature-branch-description matches refs/heads/@(dev|feature-*)" ]
+
+  export GITHUB_REF=refs/heads/dev
+  run branch "dev|feature-*"
+  [ "$status" -eq 0 ]
+  echo $output
+  [ "$output" = "refs/heads/dev matches refs/heads/@(dev|feature-*)" ]
+}
+
+@test "branch: does not match a or b" {
+  export GITHUB_REF=refs/heads/another-branch-description
+  run branch "dev|feature-*"
+  [ "$status" -eq 78 ]
+  echo $output
+  [ "$output" = "refs/heads/another-branch-description does not match refs/heads/@(dev|feature-*)" ]
+}

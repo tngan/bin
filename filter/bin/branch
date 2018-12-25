@@ -1,5 +1,10 @@
 #!/bin/sh
 
-pattern="refs/heads/${1:-*}"
+if [[ $1 =~ '|' ]];
+then
+  pattern="refs/heads/@($1)"
+else
+  pattern="refs/heads/${1:-*}"
+fi
 
 exec ref "$pattern"

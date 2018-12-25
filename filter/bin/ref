@@ -2,6 +2,8 @@
 
 set -e
 
+shopt -s extglob
+
 pattern=$1
 
 case "$GITHUB_REF" in
